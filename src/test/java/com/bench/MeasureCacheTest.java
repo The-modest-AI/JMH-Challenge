@@ -19,7 +19,7 @@ public class MeasureCacheTest {
     @BenchmarkMode(Mode.AverageTime)
     @Measurement(iterations = 3, timeUnit = MICROSECONDS)
     public void benchExec(Blackhole blackhole) throws IOException {
-        var fileExplorer = new TestFileExplorerImplWithCache.FileExplorerImplWithCacheSpy(new File("/home/the-ai/IdeaProjects/VanillaJava/src/resources/SampleCSVFile.csv"));
+        var fileExplorer = new TestFileExplorerImplWithCache.FileExplorerImplWithCacheSpy(new File("/home/the-ai/IdeaProjects/VanillaJava/src/resources/SampleCSVFile.csv"), 1024);
         for (int i = 0; i < 100; i += 5) {
             blackhole.consume(fileExplorer.getLine(i % 20));
         }

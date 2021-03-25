@@ -16,8 +16,8 @@ public class TestFileExplorerImplWithCache {
     public static class FileExplorerImplWithCacheSpy extends FileExplorerImplWithCache {
         File content;
 
-        public FileExplorerImplWithCacheSpy(File file) {
-            super(new FileExplorerImpl(file), 1024);
+        public FileExplorerImplWithCacheSpy(File file, int cacheSize) {
+            super(new FileExplorerImpl(file), cacheSize);
             this.content = file;
         }
 
@@ -28,9 +28,18 @@ public class TestFileExplorerImplWithCache {
     }
 
     @Test
+    void secondTest() throws IOException {   //This test.
+        var obj = new FileExplorerImplWithCacheSpy(new File("/home/the-ai/IdeaProjects/VanillaJava/src/resources/SampleCSVFile.csv"), 1);
+        String expected = "4,R380,Clay Rozendal,483,1198.97,195.99,3.99,Nunavut,Telephones and Communication,0.58";
+        assertEquals(expected, obj.getLine(4));
+        String expected2 = "12,Advantus Map Pennant Flags and Round Head Tacks,Neola Schneider,807,-14.33,3.95,2,Nunavut,Rubber Bands,0.53";
+        assertEquals(expected2, obj.getLine(12));
+    }
+
+    @Test
     void firstTest() throws IOException {
 
-        var obj = new FileExplorerImplWithCacheSpy(new File("/home/the-ai/IdeaProjects/VanillaJava/src/resources/SampleCSVFile.csv"));
+        var obj = new FileExplorerImplWithCacheSpy(new File("/home/the-ai/IdeaProjects/VanillaJava/src/resources/SampleCSVFile.csv"), 1024);
         String expected = "4,R380,Clay Rozendal,483,1198.97,195.99,3.99,Nunavut,Telephones and Communication,0.58";
         assertEquals(expected, obj.getLine(4));
         assertEquals(expected, obj.getLine(4));

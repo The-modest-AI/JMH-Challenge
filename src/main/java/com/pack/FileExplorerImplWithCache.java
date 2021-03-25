@@ -25,30 +25,19 @@ public abstract class FileExplorerImplWithCache implements FileExplorer {
 
     @Override
     public final String getLine(int lineIndex) throws IOException {
-        boolean isNull = false;
+        if (cacheCursor == cache.length) {
+            cacheCursor = 0;
+        }
         for (var c : cache) {
-            if (c == null) {
-                isNull = true;
-                break;
+            if (c != null && c.lineIndex == lineIndex) {
+                return c.line;
             }
         }
-        if (!isNull) {
-            for (var c : cache) {
-                if (c.lineIndex == lineIndex) {
-                    return c.line;
-                }
-            }
-        } else {
-            var insert = new Pair();
-            insert.line = backedExplorer.getLine(lineIndex);
-            insert.lineIndex = lineIndex;
-            cache[cacheCursor] = insert;
-            if (cacheCursor < cache.length) {
-                cacheCursor++;
-            } else {
-                cacheCursor = 0;
-            }
-        }
+        var insert = new Pair();
+        insert.line = backedExplorer.getLine(lineIndex);
+        insert.lineIndex = lineIndex;
+        cache[cacheCursor] = insert;
+        cacheCursor++;
         return cache[cacheCursor - 1].line;
     }
 }
